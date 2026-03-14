@@ -45,6 +45,16 @@ interface MoodEntry {
   id: string;
   mood: string;
   date: string;
+  racing_thoughts: boolean;
+  no_sleep: boolean;
+  over_interest: boolean;
+  lack_control: boolean;
+  anxiety: boolean;
+  ordering: boolean;
+  over_planning: boolean;
+  self_harm: boolean;
+  angry: boolean;
+  depressed_anxiety: boolean;
 }
 
 export default function Moods() {
@@ -235,12 +245,44 @@ export default function Moods() {
             <Text style={styles.emptyText}>No mood entries yet</Text>
           ) : (
             <View style={styles.historyContainer}>
-              {moodHistory.map((entry) => (
-                <View key={entry.id} style={styles.historyItem}>
-                  <Text style={styles.historyMood}>{entry.mood}</Text>
-                  <Text style={styles.historyDate}>{formatDate(entry.date)}</Text>
-                </View>
-              ))}
+              {moodHistory.map((entry) => {
+                const maniaSymptoms = [];
+                const depressionSymptoms = [];
+                
+                // Collect mania symptoms
+                if (entry.racing_thoughts) maniaSymptoms.push("Racing Thoughts");
+                if (entry.no_sleep) maniaSymptoms.push("No Need of Sleep");
+                if (entry.over_interest) maniaSymptoms.push("Overly Interested");
+                if (entry.lack_control) maniaSymptoms.push("Lack of Control");
+                if (entry.anxiety) maniaSymptoms.push("Anxiety");
+                if (entry.ordering) maniaSymptoms.push("Ordering");
+                if (entry.over_planning) maniaSymptoms.push("Over Planning");
+                
+                // Collect depression symptoms
+                if (entry.self_harm) depressionSymptoms.push("Self Harm");
+                if (entry.angry) depressionSymptoms.push("Angry");
+                if (entry.depressed_anxiety) depressionSymptoms.push("Anxious");
+                
+                const allSymptoms = [...maniaSymptoms, ...depressionSymptoms];
+                
+                return (
+                  <View key={entry.id} style={styles.historyItem}>
+                    <View style={styles.historyHeader}>
+                      <Text style={styles.historyMood}>{entry.mood}</Text>
+                      <Text style={styles.historyDate}>{formatDate(entry.date)}</Text>
+                    </View>
+                    {allSymptoms.length > 0 && (
+                      <View style={styles.symptomsTagsContainer}>
+                        {allSymptoms.map((symptom, index) => (
+                          <View key={index} style={styles.symptomTag}>
+                            <Text style={styles.symptomTagText}>{symptom}</Text>
+                          </View>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                );
+              })}
             </View>
           )}
         </View>
@@ -338,9 +380,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 16,
     borderRadius: 12,
+  },
+  historyHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 8,
   },
   historyMood: {
     fontSize: 16,
@@ -350,6 +395,23 @@ const styles = StyleSheet.create({
   historyDate: {
     fontSize: 14,
     color: "#64748b",
+  },
+  symptomsTagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginTop: 8,
+  },
+  symptomTag: {
+    backgroundColor: "#e0e7ff",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  symptomTagText: {
+    fontSize: 12,
+    color: "#4f46e5",
+    fontWeight: "500",
   },
   emptyText: {
     textAlign: "center",
