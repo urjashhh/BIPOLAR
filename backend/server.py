@@ -98,6 +98,17 @@ class DailyRoutineScore(BaseModel):
     score_date: datetime
     user: str
 
+class ChatMessageCreate(BaseModel):
+    message: str
+    user: str = "default_user"
+
+class ChatMessage(BaseModel):
+    id: str
+    user_message: str
+    ai_response: str
+    timestamp: datetime
+    user: str
+
 
 # Mood Endpoints
 @api_router.post("/moods", response_model=MoodEntry)
@@ -236,6 +247,58 @@ async def get_daily_scores(user: str = "default_user"):
         score["id"] = str(score["_id"])
         score.pop("_id", None)
     return [DailyRoutineScore(**score) for score in scores]
+
+
+# Chat Endpoints
+@api_router.post("/chat", response_model=ChatMessage)
+async def send_chat_message(input: ChatMessageCreate):
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    import uuid
+    
+    try:
+        # Initialize chat with mental health context
+        chat = LlmChat(
+            api_key=os.environ['EMERGENT_LLM_KEY'],
+            session_id=f"chat_{input.user}",
+            system_message="""You are a compassionate AI assistant for a bipolar disorder mental health tracking app. 
+Your role is to:
+- Provide empathetic, supportive responses
+- Help users reflect on their moods and feelings
+- Encourage healthy coping strategies
+- NEVER provide medical advice or diagnosis
+- Always recommend professional help for serious concerns
+- Be warm, understanding, and non-judgmental
+
+Keep responses concise (2-3 sentences) and conversational."""
+        ).with_model("openai", "gpt-5.2")
+        
+        # Send user message
+        user_message = UserMessage(text=input.message)
+        ai_response = await chat.send_message(user_message)
+        
+        # Save to database
+        chat_dict = {
+            "user_message": input.message,
+            "ai_response": ai_response,
+            "timestamp": datetime.utcnow(),
+            "user": input.user
+        }
+        result = await db.chat_messages.insert_one(chat_dict)
+        chat_dict["id"] = str(result.inserted_id)
+        chat_dict.pop("_id", None)
+        
+        return ChatMessage(**chat_dict)
+    except Exception as e:
+        logger.error(f"Chat error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Chat service error: {str(e)}")
+
+@api_router.get("/chat", response_model=List[ChatMessage])
+async def get_chat_history(user: str = "default_user", limit: int = 50):
+    messages = await db.chat_messages.find({"user": user}).sort("timestamp", -1).limit(limit).to_list(limit)
+    for msg in messages:
+        msg["id"] = str(msg["_id"])
+        msg.pop("_id", None)
+    return [ChatMessage(**msg) for msg in reversed(messages)]
 
 
 # Include the router in the main app

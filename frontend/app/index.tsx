@@ -15,6 +15,21 @@ export default function Index() {
           <Text style={styles.subtitle}>Track your journey to better mental health</Text>
         </View>
 
+        <View style={styles.chatSection}>
+          <TouchableOpacity 
+            style={styles.chatCard}
+            onPress={() => router.push("/chat")}
+          >
+            <View style={styles.chatHeader}>
+              <Ionicons name="chatbubbles" size={28} color="#8b5cf6" />
+              <Text style={styles.chatTitle}>What's happening?</Text>
+            </View>
+            <Text style={styles.chatSubtitle}>
+              Talk to your AI companion about how you're feeling
+            </Text>
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.buttonsContainer}>
           <TouchableOpacity 
             style={[styles.button, styles.moodsButton]}
@@ -70,6 +85,38 @@ const styles = StyleSheet.create({
     color: "#64748b",
     marginTop: 8,
     textAlign: "center",
+  },
+  chatSection: {
+    width: "100%",
+    marginVertical: 16,
+  },
+  chatCard: {
+    backgroundColor: "#f8f9ff",
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 2,
+    borderColor: "#8b5cf6",
+    shadowColor: "#8b5cf6",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  chatHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 8,
+  },
+  chatTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#8b5cf6",
+  },
+  chatSubtitle: {
+    fontSize: 14,
+    color: "#64748b",
+    lineHeight: 20,
   },
   buttonsContainer: {
     gap: 16,
