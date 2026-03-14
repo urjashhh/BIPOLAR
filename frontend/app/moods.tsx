@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { LineChart } from "react-native-gifted-charts";
 
 const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -141,6 +143,49 @@ export default function Moods() {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const getMoodValue = (mood: string): number => {
+    const moodMap: {[key: string]: number} = {
+      "Extremely Suicidal": 1,
+      "Extremely Depressed": 2,
+      "Depressed": 3,
+      "Sad": 4,
+      "Normal": 5,
+      "Pleasant": 6,
+      "Very Happy": 7,
+      "Hypomanic": 8,
+      "Manic": 9,
+    };
+    return moodMap[mood] || 5;
+  };
+
+  const getMoodColor = (value: number): string => {
+    if (value <= 2) return "#991b1b";
+    if (value <= 4) return "#3b82f6";
+    if (value === 5) return "#10b981";
+    if (value <= 6) return "#fbbf24";
+    if (value <= 7) return "#f59e0b";
+    return "#dc2626";
+  };
+
+  const prepareChartData = () => {
+    if (moodHistory.length === 0) return [];
+    
+    const chartData = moodHistory
+      .slice(0, 10)
+      .reverse()
+      .map((entry, index) => {
+        const value = getMoodValue(entry.mood);
+        return {
+          value: value,
+          label: new Date(entry.date).getDate().toString(),
+          dataPointColor: getMoodColor(value),
+          dataPointRadius: 5,
+        };
+      });
+    
+    return chartData;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -235,6 +280,69 @@ export default function Moods() {
                   <Text style={styles.saveButtonText}>Save Symptoms</Text>
                 )}
               </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        {moodHistory.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Mood Trend (Last 10 Entries)</Text>
+            <View style={styles.chartContainer}>
+              <View style={styles.chartLegend}>
+                <View style={styles.legendRow}>
+                  <View style={[styles.legendDot, { backgroundColor: "#dc2626" }]} />
+                  <Text style={styles.legendText}>Manic/Hypomanic</Text>
+                </View>
+                <View style={styles.legendRow}>
+                  <View style={[styles.legendDot, { backgroundColor: "#10b981" }]} />
+                  <Text style={styles.legendText}>Normal</Text>
+                </View>
+                <View style={styles.legendRow}>
+                  <View style={[styles.legendDot, { backgroundColor: "#991b1b" }]} />
+                  <Text style={styles.legendText}>Depressed</Text>
+                </View>
+              </View>
+              <LineChart
+                data={prepareChartData()}
+                width={Dimensions.get('window').width - 64}
+                height={200}
+                color="#6366f1"
+                thickness={2}
+                dataPointsColor="#6366f1"
+                startFillColor="rgba(99, 102, 241, 0.3)"
+                endFillColor="rgba(99, 102, 241, 0.05)"
+                startOpacity={0.9}
+                endOpacity={0.2}
+                curved
+                areaChart
+                hideRules
+                hideYAxisText
+                yAxisColor="#e2e8f0"
+                xAxisColor="#e2e8f0"
+                yAxisThickness={0}
+                xAxisThickness={1}
+                noOfSections={4}
+                maxValue={10}
+                pointerConfig={{
+                  pointerStripHeight: 160,
+                  pointerStripColor: '#6366f1',
+                  pointerStripWidth: 2,
+                  pointerColor: '#6366f1',
+                  radius: 6,
+                  pointerLabelWidth: 100,
+                  pointerLabelHeight: 90,
+                  activatePointersOnLongPress: false,
+                  autoAdjustPointerLabelPosition: false,
+                  pointerLabelComponent: (items: any) => {
+                    const moodNames = ["", "Extremely Suicidal", "Extremely Depressed", "Depressed", "Sad", "Normal", "Pleasant", "Very Happy", "Hypomanic", "Manic"];
+                    return (
+                      <View style={styles.tooltipContainer}>
+                        <Text style={styles.tooltipText}>{moodNames[items[0]?.value] || ""}</Text>
+                      </View>
+                    );
+                  },
+                }}
+              />
             </View>
           </View>
         )}
@@ -418,5 +526,43 @@ const styles = StyleSheet.create({
     color: "#64748b",
     fontSize: 14,
     padding: 24,
+  },
+  chartContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+  },
+  chartLegend: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 16,
+    gap: 8,
+  },
+  legendRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  legendDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  legendText: {
+    fontSize: 11,
+    color: "#64748b",
+  },
+  tooltipContainer: {
+    backgroundColor: "#1e293b",
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  tooltipText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });

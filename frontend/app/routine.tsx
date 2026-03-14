@@ -9,10 +9,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { LineChart } from "react-native-gifted-charts";
 
 const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -133,6 +135,22 @@ export default function Routine() {
     return date.toLocaleDateString() + " " + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const prepareScoreChartData = () => {
+    if (scores.length === 0) return [];
+    
+    const chartData = scores
+      .slice(0, 10)
+      .reverse()
+      .map((score, index) => ({
+        value: score.total_points,
+        label: new Date(score.score_date).getDate().toString(),
+        dataPointColor: "#10b981",
+        dataPointRadius: 5,
+      }));
+    
+    return chartData;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -212,6 +230,53 @@ export default function Routine() {
               </View>
             )}
           </View>
+
+          {scores.length > 0 && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Score Progress (Last 10 Entries)</Text>
+              <View style={styles.chartContainer}>
+                <LineChart
+                  data={prepareScoreChartData()}
+                  width={Dimensions.get('window').width - 64}
+                  height={200}
+                  color="#10b981"
+                  thickness={3}
+                  dataPointsColor="#10b981"
+                  startFillColor="rgba(16, 185, 129, 0.3)"
+                  endFillColor="rgba(16, 185, 129, 0.05)"
+                  startOpacity={0.9}
+                  endOpacity={0.2}
+                  curved
+                  areaChart
+                  hideRules
+                  hideYAxisText
+                  yAxisColor="#e2e8f0"
+                  xAxisColor="#e2e8f0"
+                  yAxisThickness={0}
+                  xAxisThickness={1}
+                  noOfSections={4}
+                  pointerConfig={{
+                    pointerStripHeight: 160,
+                    pointerStripColor: '#10b981',
+                    pointerStripWidth: 2,
+                    pointerColor: '#10b981',
+                    radius: 6,
+                    pointerLabelWidth: 100,
+                    pointerLabelHeight: 90,
+                    activatePointersOnLongPress: false,
+                    autoAdjustPointerLabelPosition: false,
+                    pointerLabelComponent: (items: any) => {
+                      return (
+                        <View style={styles.tooltipContainer}>
+                          <Text style={styles.tooltipText}>{items[0]?.value || 0} points</Text>
+                        </View>
+                      );
+                    },
+                  }}
+                />
+              </View>
+            </View>
+          )}
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Routine Score History</Text>
@@ -374,5 +439,22 @@ const styles = StyleSheet.create({
     color: "#64748b",
     fontSize: 14,
     padding: 24,
+  },
+  chartContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 16,
+    alignItems: "center",
+  },
+  tooltipContainer: {
+    backgroundColor: "#1e293b",
+    padding: 8,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  tooltipText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
