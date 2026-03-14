@@ -254,13 +254,98 @@ async def get_daily_scores(user: str = "default_user"):
 async def send_chat_message(input: ChatMessageCreate):
     from emergentintegrations.llm.chat import LlmChat, UserMessage
     import uuid
+    import re
     
     try:
-        # Initialize chat with mental health context
-        chat = LlmChat(
-            api_key=os.environ['EMERGENT_LLM_KEY'],
-            session_id=f"chat_{input.user}",
-            system_message="""You are a compassionate AI assistant for a bipolar disorder mental health tracking app. 
+        user_message_lower = input.message.lower().strip()
+        ai_response = None
+        
+        # Check for personalized response patterns
+        
+        # Pattern 1: Anxiety detection
+        anxiety_keywords = ['anxious', 'anxiety', 'panic', 'worried', 'nervous']
+        if any(keyword in user_message_lower for keyword in anxiety_keywords) and not any(level in user_message_lower for level in ['high', 'very', 'extremely']):
+            ai_response = """I'm here with you. Let's take this step by step.
+
+How anxious are you feeling right now? Please tell me:
+- High
+- Very high  
+- Extremely high
+
+This will help me guide you to the best coping technique."""
+        
+        # Pattern 2: Anxiety level responses
+        elif 'extremely high' in user_message_lower or 'extremely anxious' in user_message_lower:
+            ai_response = """Your anxiety is at a critical level. Please take your SOS medicine right now if you have it prescribed.
+
+After taking your medication:
+1. Sit or lie down in a safe, comfortable place
+2. Focus on your breathing
+3. Remember that this feeling will pass
+
+If you don't have SOS medication or symptoms persist, please contact your doctor or crisis helpline immediately. You deserve immediate support. 💜"""
+        
+        elif 'very high' in user_message_lower or 'very anxious' in user_message_lower:
+            ai_response = """Your anxiety is very intense right now. Let's use a physical reset technique:
+
+**Splash cold water on your face:**
+1. Go to the nearest sink
+2. Splash cold water on your face 3-5 times
+3. Dry your face gently
+4. Take 5 deep breaths
+
+The cold water activates your body's dive reflex and can quickly reduce anxiety. You've got this! 💙"""
+        
+        elif ('high' in user_message_lower and 'anxious' in user_message_lower) or ('high anxiety' in user_message_lower):
+            ai_response = """Let's do the 54321 grounding technique together. This will help bring you back to the present moment.
+
+**Look around and notice:**
+- **5 things** you can see
+- **4 things** you can touch
+- **3 things** you can hear
+- **2 things** you can smell
+- **1 thing** you can taste
+
+Take your time with each sense. You're safe, and this will pass. 🌿"""
+        
+        # Pattern 3: Fear of men
+        elif re.search(r'(scared|afraid|fear).*(men|man)', user_message_lower) or re.search(r'(men|man).*(scared|afraid|fear)', user_message_lower):
+            ai_response = """I acknowledge that some terrible, horrifying, scary things have happened in the past, but **you are safe right now**. 
+
+No matter how many men are around you, no one can harm you because:
+- You can fight
+- You can protect yourself  
+- There are so many people to protect you around
+
+Your strength is real. Your safety is real. You are not alone. 💪💜"""
+        
+        # Pattern 4: Flashbacks
+        elif 'flashback' in user_message_lower or 'having flashbacks' in user_message_lower or 'getting flashbacks' in user_message_lower:
+            ai_response = """I acknowledge that some terrible, horrifying, scary things have happened in the past, but **nothing is happening to you right now**.
+
+There are very few chances of such things happening in the future. It was very painful, but it is gone now. The pain is gone.
+
+**You are here. You are safe. You are in the present moment.** 
+
+Ground yourself: Touch something near you, feel its texture. You are here, and you are safe. 🌸"""
+        
+        # Pattern 5: Extreme depression
+        elif re.search(r'(extremely|very|really).*(depressed|depression)', user_message_lower) or 'extreme depression' in user_message_lower or 'feeling extremely depressed' in user_message_lower:
+            ai_response = """I hear you, and I want to help you feel even a little bit better right now.
+
+**Please try this:** Go for a 10-minute run or cycle ride, then come back.
+
+Movement can help shift your mood physically. Even if it feels impossible, just 10 minutes can make a difference. You don't have to go fast—just move your body.
+
+I'll be here when you return. You can do this. 🏃‍♀️💙"""
+        
+        # If no personalized pattern matched, use AI
+        if ai_response is None:
+            # Initialize chat with mental health context
+            chat = LlmChat(
+                api_key=os.environ['EMERGENT_LLM_KEY'],
+                session_id=f"chat_{input.user}",
+                system_message="""You are a compassionate AI assistant for a bipolar disorder mental health tracking app. 
 Your role is to:
 - Provide empathetic, supportive responses
 - Help users reflect on their moods and feelings
@@ -270,11 +355,11 @@ Your role is to:
 - Be warm, understanding, and non-judgmental
 
 Keep responses concise (2-3 sentences) and conversational."""
-        ).with_model("openai", "gpt-5.2")
-        
-        # Send user message
-        user_message = UserMessage(text=input.message)
-        ai_response = await chat.send_message(user_message)
+            ).with_model("openai", "gpt-5.2")
+            
+            # Send user message
+            user_message = UserMessage(text=input.message)
+            ai_response = await chat.send_message(user_message)
         
         # Save to database
         chat_dict = {
