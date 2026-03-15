@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -36,7 +37,6 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
@@ -90,93 +90,119 @@ export default function Chat() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.keyboardView}
-        keyboardVerticalOffset={0}
-      >
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#1e293b" />
-          </TouchableOpacity>
-          <View style={styles.headerContent}>
-            <Ionicons name="chatbubbles" size={24} color="#8b5cf6" />
-            <Text style={styles.title}>AI Companion</Text>
-          </View>
-        </View>
-
-        <ScrollView 
-          ref={scrollViewRef}
-          style={styles.messagesContainer}
-          contentContainerStyle={styles.messagesContent}
+    <LinearGradient
+      colors={['#ffeef8', '#e8f4fd', '#f0e6ff']}
+      style={styles.gradient}
+    >
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardView}
+          keyboardVerticalOffset={0}
         >
-          {initialLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#8b5cf6" />
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="arrow-back" size={28} color="#8b5a8e" />
+            </TouchableOpacity>
+            <View style={styles.headerContent}>
+              <LinearGradient
+                colors={['#d4b3e8', '#c8a7e8']}
+                style={styles.headerIcon}
+              >
+                <Ionicons name="chatbubbles" size={24} color="#fff" />
+              </LinearGradient>
+              <Text style={styles.title}>AI Companion</Text>
             </View>
-          ) : messages.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Ionicons name="chatbubble-ellipses-outline" size={64} color="#cbd5e1" />
-              <Text style={styles.emptyTitle}>Start a conversation</Text>
-              <Text style={styles.emptySubtitle}>
-                Share how you're feeling, and I'll listen
-              </Text>
-            </View>
-          ) : (
-            messages.map((msg) => (
-              <View key={msg.id}>
-                <View style={styles.userMessageContainer}>
-                  <View style={styles.userBubble}>
-                    <Text style={styles.userText}>{msg.user_message}</Text>
-                    <Text style={styles.timestamp}>{formatTime(msg.timestamp)}</Text>
-                  </View>
-                </View>
-                <View style={styles.aiBubbleContainer}>
-                  <View style={styles.aiBubble}>
-                    <Text style={styles.aiText}>{msg.ai_response}</Text>
-                    <Text style={styles.timestamp}>{formatTime(msg.timestamp)}</Text>
-                  </View>
-                </View>
-              </View>
-            ))
-          )}
-          {loading && (
-            <View style={styles.aiBubbleContainer}>
-              <View style={styles.aiBubble}>
-                <ActivityIndicator color="#8b5cf6" />
-              </View>
-            </View>
-          )}
-        </ScrollView>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="What's happening?"
-            placeholderTextColor="#94a3b8"
-            value={message}
-            onChangeText={setMessage}
-            multiline
-            maxLength={500}
-          />
-          <TouchableOpacity
-            style={[styles.sendButton, (!message.trim() || loading) && styles.sendButtonDisabled]}
-            onPress={handleSend}
-            disabled={!message.trim() || loading}
+          <ScrollView 
+            ref={scrollViewRef}
+            style={styles.messagesContainer}
+            contentContainerStyle={styles.messagesContent}
+            showsVerticalScrollIndicator={false}
           >
-            <Ionicons name="send" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+            {initialLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#9370db" />
+              </View>
+            ) : messages.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Ionicons name="chatbubble-ellipses-outline" size={72} color="#d4b3e8" />
+                <Text style={styles.emptyTitle}>Start a conversation</Text>
+                <Text style={styles.emptySubtitle}>
+                  Share how you're feeling, and I'll listen
+                </Text>
+              </View>
+            ) : (
+              messages.map((msg) => (
+                <View key={msg.id}>
+                  <View style={styles.userMessageContainer}>
+                    <LinearGradient
+                      colors={['#d4b3e8', '#c8a7e8']}
+                      style={styles.userBubble}
+                    >
+                      <Text style={styles.userText}>{msg.user_message}</Text>
+                      <Text style={styles.userTimestamp}>{formatTime(msg.timestamp)}</Text>
+                    </LinearGradient>
+                  </View>
+                  <View style={styles.aiBubbleContainer}>
+                    <View style={styles.aiBubble}>
+                      <Text style={styles.aiText}>{msg.ai_response}</Text>
+                      <Text style={styles.aiTimestamp}>{formatTime(msg.timestamp)}</Text>
+                    </View>
+                  </View>
+                </View>
+              ))
+            )}
+            {loading && (
+              <View style={styles.aiBubbleContainer}>
+                <View style={styles.aiBubble}>
+                  <ActivityIndicator color="#9370db" />
+                </View>
+              </View>
+            )}
+          </ScrollView>
+
+          <View style={styles.inputContainer}>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.9)', 'rgba(255, 255, 255, 0.7)']}
+              style={styles.inputGradient}
+            >
+              <TextInput
+                style={styles.input}
+                placeholder="What's happening?"
+                placeholderTextColor="#b19cd9"
+                value={message}
+                onChangeText={setMessage}
+                multiline
+                maxLength={500}
+              />
+              <TouchableOpacity
+                style={styles.sendButtonContainer}
+                onPress={handleSend}
+                disabled={!message.trim() || loading}
+              >
+                <LinearGradient
+                  colors={!message.trim() || loading ? ['#e0d0e0', '#d0c0d0'] : ['#d4b3e8', '#c8a7e8']}
+                  style={styles.sendButton}
+                >
+                  <Ionicons name="send" size={22} color="#fff" />
+                </LinearGradient>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc",
   },
   keyboardView: {
     flex: 1,
@@ -184,10 +210,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
+    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
   backButton: {
     padding: 8,
@@ -198,10 +224,17 @@ const styles = StyleSheet.create({
     gap: 12,
     marginLeft: 8,
   },
+  headerIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1e293b",
+    fontSize: 24,
+    fontWeight: "800",
+    color: "#8b5a8e",
   },
   messagesContainer: {
     flex: 1,
@@ -224,14 +257,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#475569",
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#8b5a8e",
     marginTop: 16,
   },
   emptySubtitle: {
-    fontSize: 14,
-    color: "#94a3b8",
+    fontSize: 16,
+    color: "#9370db",
     textAlign: "center",
   },
   userMessageContainer: {
@@ -239,70 +272,82 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   userBubble: {
-    backgroundColor: "#8b5cf6",
-    borderRadius: 16,
-    borderTopRightRadius: 4,
-    padding: 12,
+    borderRadius: 20,
+    borderTopRightRadius: 6,
+    padding: 16,
     maxWidth: "80%",
+    shadowColor: "#d4b3e8",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   userText: {
     color: "#fff",
     fontSize: 16,
     lineHeight: 22,
+    marginBottom: 4,
+  },
+  userTimestamp: {
+    fontSize: 11,
+    color: "rgba(255, 255, 255, 0.8)",
   },
   aiBubbleContainer: {
     alignItems: "flex-start",
     marginBottom: 8,
   },
   aiBubble: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    borderTopLeftRadius: 4,
-    padding: 12,
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 20,
+    borderTopLeftRadius: 6,
+    padding: 16,
     maxWidth: "80%",
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
+    borderWidth: 2,
+    borderColor: "#ffd1dc",
+    shadowColor: "#ffb6d9",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   aiText: {
-    color: "#1e293b",
+    color: "#6b5b8e",
     fontSize: 16,
     lineHeight: 22,
+    marginBottom: 4,
   },
-  timestamp: {
+  aiTimestamp: {
     fontSize: 11,
-    color: "#94a3b8",
-    marginTop: 4,
+    color: "#b19cd9",
   },
   inputContainer: {
-    flexDirection: "row",
     padding: 16,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#e2e8f0",
-    gap: 12,
+  },
+  inputGradient: {
+    flexDirection: "row",
+    borderRadius: 28,
+    padding: 8,
+    gap: 8,
     alignItems: "flex-end",
+    borderWidth: 2,
+    borderColor: "#ffd1dc",
   },
   input: {
     flex: 1,
-    backgroundColor: "#f8fafc",
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     fontSize: 16,
-    color: "#1e293b",
+    color: "#6b5b8e",
     maxHeight: 100,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  sendButtonContainer: {
+    marginBottom: 4,
   },
   sendButton: {
-    backgroundColor: "#8b5cf6",
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
-  },
-  sendButtonDisabled: {
-    backgroundColor: "#cbd5e1",
   },
 });
