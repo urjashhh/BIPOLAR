@@ -1,4 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -21,6 +23,9 @@ db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
 app = FastAPI()
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="/app/frontend_web/static"), name="static")
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
@@ -407,3 +412,24 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+# HTML routes
+@app.get("/")
+async def root():
+    return FileResponse("/app/frontend_web/index.html")
+
+@app.get("/chat.html")
+async def chat_page():
+    return FileResponse("/app/frontend_web/chat.html")
+
+@app.get("/moods.html")
+async def moods_page():
+    return FileResponse("/app/frontend_web/moods.html")
+
+@app.get("/gratitude.html")
+async def gratitude_page():
+    return FileResponse("/app/frontend_web/gratitude.html")
+
+@app.get("/routine.html")
+async def routine_page():
+    return FileResponse("/app/frontend_web/routine.html")

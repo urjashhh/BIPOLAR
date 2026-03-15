@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gratitude - POLARPATH</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <button class="back-button" onclick="window.location.href='index.html'">←</button>
+            <h2 class="page-title">Gratitude Journal</h2>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">New Entry</h3>
+            <div class="form-container">
+                <input 
+                    type="text" 
+                    class="input" 
+                    id="titleInput" 
+                    placeholder="Title"
+                />
+                <textarea 
+                    class="textarea" 
+                    id="descriptionInput" 
+                    placeholder="What are you grateful for today?"
+                ></textarea>
+                <button class="save-button" id="saveButton" onclick="saveEntry()">Save Entry</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Gratitude History</h3>
+            <div class="entries-container" id="entriesContainer"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/gratitude.js"></script>
+</body>
+</html>

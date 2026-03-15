@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - POLARPATH</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <button class="back-button" onclick="window.location.href='index.html'">←</button>
+            <span style="font-size: 24px; margin-left: 8px;">💬</span>
+            <h2 class="page-title">AI Companion</h2>
+        </div>
+
+        <div class="chat-container">
+            <div class="messages-container" id="messagesContainer"></div>
+            
+            <div class="chat-input-container">
+                <textarea 
+                    class="chat-input" 
+                    id="messageInput" 
+                    placeholder="What's happening?"
+                    rows="1"
+                    maxlength="500"
+                ></textarea>
+                <button class="send-button" id="sendButton" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/chat.js"></script>
+</body>
+</html>

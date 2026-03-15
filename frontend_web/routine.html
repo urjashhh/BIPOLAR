@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routine - POLARPATH</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <button class="back-button" onclick="window.location.href='index.html'">←</button>
+            <h2 class="page-title">Routine Tracker</h2>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Add New Task</h3>
+            <div class="form-container">
+                <input 
+                    type="text" 
+                    class="input" 
+                    id="taskInput" 
+                    placeholder="Task Name"
+                />
+                <button class="add-button" id="addButton" onclick="addTask()">Add Task</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Today's Tasks</h3>
+            <div id="tasksContainer"></div>
+            <div id="scoreSection" style="margin-top: 16px; display: none;">
+                <div class="form-container">
+                    <div style="text-align: center; font-size: 18px; font-weight: 600; margin-bottom: 12px;">
+                        Current Score: <span id="currentScore">0</span> points
+                    </div>
+                    <button class="save-button" onclick="saveDailyScore()">Save Daily Routine Score</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="chartSection" style="display: none;">
+            <h3 class="section-title">Score Progress (Last 10 Entries)</h3>
+            <div class="chart-container">
+                <canvas id="scoreChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Routine Score History</h3>
+            <div class="scores-container" id="scoresContainer"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/routine.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moods - POLARPATH</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <button class="back-button" onclick="window.location.href='index.html'">←</button>
+            <h2 class="page-title">Mood Tracking</h2>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">How are you feeling?</h3>
+            <div class="mood-grid" id="moodGrid"></div>
+        </div>
+
+        <div class="section" id="symptomsSection" style="display: none;">
+            <h3 class="section-title" id="symptomsTitle"></h3>
+            <div class="symptoms-container" id="symptomsContainer"></div>
+        </div>
+
+        <div class="section" id="chartSection" style="display: none;">
+            <h3 class="section-title">Mood Trend (Last 10 Days)</h3>
+            <div class="chart-container">
+                <div class="chart-legend">
+                    <div class="legend-row">
+                        <div class="legend-dot" style="background-color: #dc2626;"></div>
+                        <span class="legend-text">Manic/Hypomanic</span>
+                    </div>
+                    <div class="legend-row">
+                        <div class="legend-dot" style="background-color: #10b981;"></div>
+                        <span class="legend-text">Normal</span>
+                    </div>
+                    <div class="legend-row">
+                        <div class="legend-dot" style="background-color: #991b1b;"></div>
+                        <span class="legend-text">Depressed</span>
+                    </div>
+                </div>
+                <canvas id="moodChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Mood History</h3>
+            <div class="history-container" id="historyContainer"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/moods.js"></script>
+</body>
+</html>
