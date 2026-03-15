@@ -32,15 +32,15 @@ const MOTIVATIONAL_QUOTES = [
 ];
 
 const MOOD_OPTIONS = [
-    { label: "Manic", color: "#dc2626" },
-    { label: "Hypomanic", color: "#ea580c" },
-    { label: "Very Happy", color: "#f59e0b" },
-    { label: "Pleasant", color: "#fbbf24" },
-    { label: "Normal", color: "#10b981" },
-    { label: "Sad", color: "#3b82f6" },
-    { label: "Depressed", color: "#6366f1" },
-    { label: "Extremely Depressed", color: "#7c3aed" },
-    { label: "Extremely Suicidal", color: "#991b1b" },
+    { label: "Manic", color: "linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)" },
+    { label: "Hypomanic", color: "linear-gradient(135deg, #ffd1ff 0%, #ffc4e8 100%)" },
+    { label: "Very Happy", color: "linear-gradient(135deg, #fff9b0 0%, #ffeaa7 100%)" },
+    { label: "Pleasant", color: "linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)" },
+    { label: "Normal", color: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)" },
+    { label: "Sad", color: "linear-gradient(135deg, #c1dfc4 0%, #deecdd 100%)" },
+    { label: "Depressed", color: "linear-gradient(135deg, #d4bfff 0%, #c8e0f5 100%)" },
+    { label: "Extremely Depressed", color: "linear-gradient(135deg, #b5c6e0 0%, #d4d3dd 100%)" },
+    { label: "Extremely Suicidal", color: "linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)" },
 ];
 
 const MANIA_SYMPTOMS = [
@@ -216,7 +216,7 @@ function scrollToBottom() {
 function initializeMoodGrid() {
     const grid = document.getElementById('moodGrid');
     grid.innerHTML = MOOD_OPTIONS.map(mood => `
-        <button class="mood-button" style="background-color: ${mood.color}" onclick="selectMood('${mood.label}')">
+        <button class="mood-button" style="background: ${mood.color}" onclick="selectMood('${mood.label}')">
             ${mood.label}
         </button>
     `).join('');
