@@ -21,7 +21,12 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "name": "PolarPath",
+      "shortName": "PolarPath",
+      "description": "Bipolar Wellness Tracker",
+      "themeColor": "#8b5a8e",
+      "backgroundColor": "#ffeef8"
     },
     "plugins": [
       "expo-router",
