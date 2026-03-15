@@ -1,8 +1,9 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const MOTIVATIONAL_QUOTES = [
   "DISCIPLINE Trumps motivation",
@@ -41,183 +42,252 @@ export default function Index() {
       setCurrentQuoteIndex((prevIndex) => 
         (prevIndex + 1) % MOTIVATIONAL_QUOTES.length
       );
-    }, 15000); // Change quote every 15 seconds
+    }, 15000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Ionicons name="heart" size={48} color="#6366f1" />
-          <Text style={styles.title}>POLARPATH</Text>
-          <Text style={styles.subtitle}>Track your journey to better mental health</Text>
-        </View>
+    <LinearGradient
+      colors={['#ffeef8', '#e8f4fd', '#f0e6ff']}
+      style={styles.gradient}
+    >
+      <SafeAreaView style={styles.container}>
+        <ScrollView 
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            <View style={styles.iconContainer}>
+              <LinearGradient
+                colors={['#ff9a9e', '#fecfef', '#b19cd9']}
+                style={styles.iconGradient}
+              >
+                <Ionicons name="heart" size={40} color="#fff" />
+              </LinearGradient>
+            </View>
+            <Text style={styles.title}>POLARPATH</Text>
+            <Text style={styles.subtitle}>Your journey to wellness ✨</Text>
+          </View>
 
-        <View style={styles.quoteSection}>
-          <Ionicons name="trophy" size={24} color="#f59e0b" />
-          <Text style={styles.quoteText}>"{MOTIVATIONAL_QUOTES[currentQuoteIndex]}"</Text>
-        </View>
+          <View style={styles.quoteCard}>
+            <LinearGradient
+              colors={['#fff9e6', '#ffe6f0']}
+              style={styles.quoteGradient}
+            >
+              <Ionicons name="trophy" size={28} color="#f59e0b" style={styles.quoteIcon} />
+              <Text style={styles.quoteText}>"{MOTIVATIONAL_QUOTES[currentQuoteIndex]}"</Text>
+            </LinearGradient>
+          </View>
 
-        <View style={styles.chatSection}>
           <TouchableOpacity 
             style={styles.chatCard}
             onPress={() => router.push("/chat")}
+            activeOpacity={0.8}
           >
-            <View style={styles.chatHeader}>
-              <Ionicons name="chatbubbles" size={28} color="#8b5cf6" />
-              <Text style={styles.chatTitle}>What's happening?</Text>
-            </View>
-            <Text style={styles.chatSubtitle}>
-              Talk to your AI companion about how you're feeling
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity 
-            style={[styles.button, styles.moodsButton]}
-            onPress={() => router.push("/moods")}
-          >
-            <Ionicons name="happy-outline" size={32} color="#fff" />
-            <Text style={styles.buttonText}>MOODS</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={[styles.button, styles.gratitudeButton]}
-            onPress={() => router.push("/gratitude")}
-          >
-            <Ionicons name="journal-outline" size={32} color="#fff" />
-            <Text style={styles.buttonText}>GRATITUDE JOURNAL</Text>
+            <LinearGradient
+              colors={['#f3e5f5', '#e1bee7', '#e8eaf6']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
+              style={styles.chatGradient}
+            >
+              <View style={styles.chatIconContainer}>
+                <Ionicons name="chatbubbles" size={32} color="#9370db" />
+              </View>
+              <View style={styles.chatContent}>
+                <Text style={styles.chatTitle}>What's happening?</Text>
+                <Text style={styles.chatSubtitle}>Talk to your AI companion</Text>
+              </View>
+              <Ionicons name="arrow-forward" size={24} color="#9370db" />
+            </LinearGradient>
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={[styles.button, styles.routineButton]}
-            onPress={() => router.push("/routine")}
-          >
-            <Ionicons name="checkmark-circle-outline" size={32} color="#fff" />
-            <Text style={styles.buttonText}>ROUTINE</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity 
+              onPress={() => router.push("/moods")}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={['#d4b3e8', '#c8a7e8', '#b19cd9']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                style={styles.featureButton}
+              >
+                <Ionicons name="happy-outline" size={32} color="#fff" />
+                <Text style={styles.buttonText}>MOODS</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              onPress={() => router.push("/gratitude")}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={['#ffb6d9', '#ffc4e8', '#ffd1e8']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                style={styles.featureButton}
+              >
+                <Ionicons name="journal-outline" size={32} color="#fff" />
+                <Text style={styles.buttonText}>GRATITUDE JOURNAL</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              onPress={() => router.push("/routine")}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={['#a8e6cf', '#98d8c8', '#88d4c0']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                style={styles.featureButton}
+              >
+                <Ionicons name="checkmark-circle-outline" size={32} color="#fff" />
+                <Text style={styles.buttonText}>ROUTINE</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc",
   },
-  content: {
-    flex: 1,
+  scrollContent: {
     padding: 24,
-    justifyContent: "space-between",
+    paddingBottom: 40,
   },
   header: {
     alignItems: "center",
-    marginTop: 40,
+    marginBottom: 24,
+    marginTop: 20,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#1e293b",
-    marginTop: 16,
+  iconContainer: {
+    marginBottom: 16,
+    shadowColor: "#ff9a9e",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
   },
-  subtitle: {
-    fontSize: 16,
-    color: "#64748b",
-    marginTop: 8,
-    textAlign: "center",
-  },
-  quoteSection: {
-    width: "100%",
-    backgroundColor: "#fff9ed",
-    borderRadius: 16,
-    padding: 20,
-    marginVertical: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: "#f59e0b",
-    shadowColor: "#f59e0b",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-    minHeight: 100,
+  iconGradient: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
-    gap: 12,
+  },
+  title: {
+    fontSize: 42,
+    fontWeight: "800",
+    color: "#8b5a8e",
+    marginBottom: 8,
+    letterSpacing: 3,
+    textShadowColor: 'rgba(139, 90, 142, 0.2)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
+  },
+  subtitle: {
+    fontSize: 17,
+    color: "#9370db",
+    fontWeight: "600",
+  },
+  quoteCard: {
+    marginBottom: 24,
+    borderRadius: 24,
+    overflow: 'hidden',
+    shadowColor: "#ffc0cb",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  quoteGradient: {
+    padding: 24,
+    minHeight: 140,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  quoteIcon: {
+    marginBottom: 12,
   },
   quoteText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#92400e",
+    fontSize: 17,
+    fontWeight: "700",
+    color: "#c27ba0",
     textAlign: "center",
-    lineHeight: 24,
+    lineHeight: 26,
     fontStyle: "italic",
   },
-  chatSection: {
-    width: "100%",
-    marginVertical: 16,
-  },
   chatCard: {
-    backgroundColor: "#f8f9ff",
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 2,
-    borderColor: "#8b5cf6",
-    shadowColor: "#8b5cf6",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
+    marginBottom: 24,
+    borderRadius: 24,
+    overflow: 'hidden',
+    shadowColor: "#9370db",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
   },
-  chatHeader: {
+  chatGradient: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    marginBottom: 8,
+    padding: 24,
+    gap: 16,
+  },
+  chatIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  chatContent: {
+    flex: 1,
   },
   chatTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#8b5cf6",
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#8b5a8e",
+    marginBottom: 4,
   },
   chatSubtitle: {
-    fontSize: 14,
-    color: "#64748b",
-    lineHeight: 20,
+    fontSize: 15,
+    color: "#9370db",
+    fontWeight: "500",
   },
   buttonsContainer: {
     gap: 16,
-    marginBottom: 40,
   },
-  button: {
+  featureButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
-    borderRadius: 16,
+    borderRadius: 24,
     gap: 12,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  moodsButton: {
-    backgroundColor: "#6366f1",
-  },
-  gratitudeButton: {
-    backgroundColor: "#ec4899",
-  },
-  routineButton: {
-    backgroundColor: "#10b981",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 8,
   },
   buttonText: {
     color: "#fff",
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "800",
+    letterSpacing: 1,
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
 });
