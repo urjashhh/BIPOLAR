@@ -39,30 +39,22 @@ export default function Index() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentQuoteIndex((prevIndex) => 
+      setCurrentQuoteIndex((prevIndex) =>
         (prevIndex + 1) % MOTIVATIONAL_QUOTES.length
       );
     }, 15000);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <LinearGradient
-      colors={['#ffeef8', '#e8f4fd', '#f0e6ff']}
-      style={styles.gradient}
-    >
+    <LinearGradient colors={['#ffeef8', '#e8f4fd', '#f0e6ff']} style={styles.gradient}>
       <SafeAreaView style={styles.container}>
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+
+          {/* Header */}
           <View style={styles.header}>
             <View style={styles.iconContainer}>
-              <LinearGradient
-                colors={['#ff9a9e', '#fecfef', '#b19cd9']}
-                style={styles.iconGradient}
-              >
+              <LinearGradient colors={['#ff9a9e', '#fecfef', '#b19cd9']} style={styles.iconGradient}>
                 <Ionicons name="heart" size={40} color="#fff" />
               </LinearGradient>
             </View>
@@ -70,25 +62,19 @@ export default function Index() {
             <Text style={styles.subtitle}>Your journey to wellness ✨</Text>
           </View>
 
+          {/* Quote */}
           <View style={styles.quoteCard}>
-            <LinearGradient
-              colors={['#fff9e6', '#ffe6f0']}
-              style={styles.quoteGradient}
-            >
+            <LinearGradient colors={['#fff9e6', '#ffe6f0']} style={styles.quoteGradient}>
               <Ionicons name="trophy" size={28} color="#f59e0b" style={styles.quoteIcon} />
               <Text style={styles.quoteText}>"{MOTIVATIONAL_QUOTES[currentQuoteIndex]}"</Text>
             </LinearGradient>
           </View>
 
-          <TouchableOpacity 
-            style={styles.chatCard}
-            onPress={() => router.push("/chat")}
-            activeOpacity={0.8}
-          >
+          {/* Chat */}
+          <TouchableOpacity style={styles.chatCard} onPress={() => router.push("/chat")} activeOpacity={0.8}>
             <LinearGradient
               colors={['#f3e5f5', '#e1bee7', '#e8eaf6']}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 1}}
+              start={{x: 0, y: 0}} end={{x: 1, y: 1}}
               style={styles.chatGradient}
             >
               <View style={styles.chatIconContainer}>
@@ -102,15 +88,13 @@ export default function Index() {
             </LinearGradient>
           </TouchableOpacity>
 
+          {/* Feature Buttons */}
           <View style={styles.buttonsContainer}>
-            <TouchableOpacity 
-              onPress={() => router.push("/moods")}
-              activeOpacity={0.8}
-            >
+
+            <TouchableOpacity onPress={() => router.push("/moods")} activeOpacity={0.8}>
               <LinearGradient
                 colors={['#d4b3e8', '#c8a7e8', '#b19cd9']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
+                start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                 style={styles.featureButton}
               >
                 <Ionicons name="happy-outline" size={32} color="#fff" />
@@ -118,14 +102,10 @@ export default function Index() {
               </LinearGradient>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              onPress={() => router.push("/gratitude")}
-              activeOpacity={0.8}
-            >
+            <TouchableOpacity onPress={() => router.push("/gratitude")} activeOpacity={0.8}>
               <LinearGradient
                 colors={['#ffb6d9', '#ffc4e8', '#ffd1e8']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
+                start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                 style={styles.featureButton}
               >
                 <Ionicons name="journal-outline" size={32} color="#fff" />
@@ -133,20 +113,28 @@ export default function Index() {
               </LinearGradient>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              onPress={() => router.push("/routine")}
-              activeOpacity={0.8}
-            >
+            <TouchableOpacity onPress={() => router.push("/routine")} activeOpacity={0.8}>
               <LinearGradient
                 colors={['#a8e6cf', '#98d8c8', '#88d4c0']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
+                start={{x: 0, y: 0}} end={{x: 1, y: 1}}
                 style={styles.featureButton}
               >
                 <Ionicons name="checkmark-circle-outline" size={32} color="#fff" />
                 <Text style={styles.buttonText}>ROUTINE</Text>
               </LinearGradient>
             </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => router.push("/therapy")} activeOpacity={0.8}>
+              <LinearGradient
+                colors={['#b3d4f5', '#a0c4f0', '#8ab4eb']}
+                start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+                style={styles.featureButton}
+              >
+                <Ionicons name="medkit-outline" size={32} color="#fff" />
+                <Text style={styles.buttonText}>THERAPY NOTES</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -155,139 +143,25 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 24,
-    paddingBottom: 40,
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 24,
-    marginTop: 20,
-  },
-  iconContainer: {
-    marginBottom: 16,
-    shadowColor: "#ff9a9e",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
-  },
-  iconGradient: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 42,
-    fontWeight: "800",
-    color: "#8b5a8e",
-    marginBottom: 8,
-    letterSpacing: 3,
-    textShadowColor: 'rgba(139, 90, 142, 0.2)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 8,
-  },
-  subtitle: {
-    fontSize: 17,
-    color: "#9370db",
-    fontWeight: "600",
-  },
-  quoteCard: {
-    marginBottom: 24,
-    borderRadius: 24,
-    overflow: 'hidden',
-    shadowColor: "#ffc0cb",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  quoteGradient: {
-    padding: 24,
-    minHeight: 140,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  quoteIcon: {
-    marginBottom: 12,
-  },
-  quoteText: {
-    fontSize: 17,
-    fontWeight: "700",
-    color: "#c27ba0",
-    textAlign: "center",
-    lineHeight: 26,
-    fontStyle: "italic",
-  },
-  chatCard: {
-    marginBottom: 24,
-    borderRadius: 24,
-    overflow: 'hidden',
-    shadowColor: "#9370db",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  chatGradient: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 24,
-    gap: 16,
-  },
-  chatIconContainer: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  chatContent: {
-    flex: 1,
-  },
-  chatTitle: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#8b5a8e",
-    marginBottom: 4,
-  },
-  chatSubtitle: {
-    fontSize: 15,
-    color: "#9370db",
-    fontWeight: "500",
-  },
-  buttonsContainer: {
-    gap: 16,
-  },
-  featureButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-    borderRadius: 24,
-    gap: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.2,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "800",
-    letterSpacing: 1,
-    textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 3,
-  },
+  gradient: { flex: 1 },
+  container: { flex: 1 },
+  scrollContent: { padding: 24, paddingBottom: 40 },
+  header: { alignItems: "center", marginBottom: 24, marginTop: 20 },
+  iconContainer: { marginBottom: 16, shadowColor: "#ff9a9e", shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 12, elevation: 8 },
+  iconGradient: { width: 80, height: 80, borderRadius: 40, justifyContent: "center", alignItems: "center" },
+  title: { fontSize: 42, fontWeight: "800", color: "#8b5a8e", marginBottom: 8, letterSpacing: 3, textShadowColor: 'rgba(139, 90, 142, 0.2)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 8 },
+  subtitle: { fontSize: 17, color: "#9370db", fontWeight: "600" },
+  quoteCard: { marginBottom: 24, borderRadius: 24, overflow: 'hidden', shadowColor: "#ffc0cb", shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 16, elevation: 8 },
+  quoteGradient: { padding: 24, minHeight: 140, justifyContent: "center", alignItems: "center" },
+  quoteIcon: { marginBottom: 12 },
+  quoteText: { fontSize: 17, fontWeight: "700", color: "#c27ba0", textAlign: "center", lineHeight: 26, fontStyle: "italic" },
+  chatCard: { marginBottom: 24, borderRadius: 24, overflow: 'hidden', shadowColor: "#9370db", shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 16, elevation: 8 },
+  chatGradient: { flexDirection: "row", alignItems: "center", padding: 24, gap: 16 },
+  chatIconContainer: { width: 56, height: 56, borderRadius: 28, backgroundColor: 'rgba(255, 255, 255, 0.6)', justifyContent: "center", alignItems: "center" },
+  chatContent: { flex: 1 },
+  chatTitle: { fontSize: 22, fontWeight: "800", color: "#8b5a8e", marginBottom: 4 },
+  chatSubtitle: { fontSize: 15, color: "#9370db", fontWeight: "500" },
+  buttonsContainer: { gap: 16 },
+  featureButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 24, borderRadius: 24, gap: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 16, elevation: 8 },
+  buttonText: { color: "#fff", fontSize: 18, fontWeight: "800", letterSpacing: 1, textShadowColor: 'rgba(0, 0, 0, 0.2)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 3 },
 });
