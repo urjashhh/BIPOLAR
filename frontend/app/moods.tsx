@@ -30,15 +30,15 @@ const MOOD_SCALE: { [key: string]: number } = {
 };
 
 const MOOD_OPTIONS = [
-  { label: "Manic",              colors: ['#ff4444', '#ff0000'] as [string, string] },
-  { label: "Hypomanic",          colors: ['#ff8c00', '#ff6600'] as [string, string] },
-  { label: "Very Happy",         colors: ['#ffd700', '#ffb300'] as [string, string] },
-  { label: "Pleasant",           colors: ['#90ee90', '#4caf50'] as [string, string] },
-  { label: "Normal",             colors: ['#a8edea', '#4dd0e1'] as [string, string] },
-  { label: "Sad",                colors: ['#81d4fa', '#0288d1'] as [string, string] },
-  { label: "Depressed",          colors: ['#7986cb', '#3949ab'] as [string, string] },
-  { label: "Extremely Depressed",colors: ['#5e35b1', '#311b92'] as [string, string] },
-  { label: "Extremely Suicidal", colors: ['#37474f', '#000000'] as [string, string] },
+  { label: "Manic",               colors: ['#ffb3b3', '#ff8fa3'] as [string, string] },
+  { label: "Hypomanic",           colors: ['#ffd4a8', '#ffbc80'] as [string, string] },
+  { label: "Very Happy",          colors: ['#fff3a3', '#ffe566'] as [string, string] },
+  { label: "Pleasant",            colors: ['#b8f0b8', '#86e086'] as [string, string] },
+  { label: "Normal",              colors: ['#a8edea', '#80ddd8'] as [string, string] },
+  { label: "Sad",                 colors: ['#b3d9f5', '#80c4ee'] as [string, string] },
+  { label: "Depressed",           colors: ['#c5c9f5', '#a0a6f0'] as [string, string] },
+  { label: "Extremely Depressed", colors: ['#c4b0e8', '#a98dd4'] as [string, string] },
+  { label: "Extremely Suicidal",  colors: ['#b0b8c8', '#8896b0'] as [string, string] },
 ];
 
 const MANIA_SYMPTOMS = [
@@ -457,8 +457,8 @@ const styles = StyleSheet.create({
   section: { padding:16, marginTop:8 },
   sectionTitle: { fontSize:20, fontWeight:"700", color:"#8b5a8e", marginBottom:16 },
   moodGrid: { gap:10 },
-  moodButton: { padding:18, borderRadius:14, alignItems:"center", shadowColor:"#000", shadowOffset:{width:0,height:3}, shadowOpacity:0.2, shadowRadius:6, elevation:4 },
-  moodButtonText: { color:"#fff", fontSize:16, fontWeight:"700", textShadowColor:'rgba(0,0,0,0.3)', textShadowOffset:{width:0,height:1}, textShadowRadius:3 },
+  moodButton: { padding:18, borderRadius:14, alignItems:"center", shadowColor:"#d4b3e8", shadowOffset:{width:0,height:3}, shadowOpacity:0.25, shadowRadius:8, elevation:4 },
+  moodButtonText: { color:"#5a3a6e", fontSize:16, fontWeight:"700", textShadowColor:'rgba(255,255,255,0.6)', textShadowOffset:{width:0,height:1}, textShadowRadius:2 },
   loadingContainer: { padding:24, alignItems:"center" },
   symptomsContainer: { backgroundColor:"rgba(255,255,255,0.8)", borderRadius:16, padding:16, gap:12, borderWidth:2, borderColor:"#ffd1dc" },
   checkboxRow: { flexDirection:"row", alignItems:"center", padding:14, backgroundColor:"rgba(255,245,248,0.9)", borderRadius:12, gap:12 },
