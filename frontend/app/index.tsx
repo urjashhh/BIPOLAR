@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Modal, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -33,9 +33,27 @@ const MOTIVATIONAL_QUOTES = [
   "Mental toughness is not an option—it's a necessity for success",
 ];
 
+const getTodayKey = () => new Date().toISOString().slice(0, 10);
+
+const hasShownPopupToday = (): boolean => {
+  if (Platform.OS === "web") {
+    const lastShown = localStorage.getItem("polarpath_calorie_popup_date");
+    return lastShown === getTodayKey();
+  }
+  return false;
+};
+
+const markPopupShownToday = () => {
+  if (Platform.OS === "web") {
+    localStorage.setItem("polarpath_calorie_popup_date", getTodayKey());
+  }
+};
+
 export default function Index() {
   const router = useRouter();
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupResponse, setPopupResponse] = useState<"yes" | "no" | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,9 +64,88 @@ export default function Index() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    // Show popup once per day
+    const timer = setTimeout(() => {
+      if (!hasShownPopupToday()) {
+        setShowPopup(true);
+      }
+    }, 800); // slight delay so app loads first
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handlePopupYes = () => {
+    setPopupResponse("yes");
+    markPopupShownToday();
+    setTimeout(() => {
+      setShowPopup(false);
+      setPopupResponse(null);
+    }, 2500);
+  };
+
+  const handlePopupNo = () => {
+    setPopupResponse("no");
+    markPopupShownToday();
+    setTimeout(() => {
+      setShowPopup(false);
+      setPopupResponse(null);
+    }, 2500);
+  };
+
   return (
     <LinearGradient colors={['#ffeef8', '#e8f4fd', '#f0e6ff']} style={styles.gradient}>
       <SafeAreaView style={styles.container}>
+
+        {/* Calorie Check Popup */}
+        <Modal visible={showPopup} transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalCard}>
+              <LinearGradient colors={['#ffeef8', '#f0e6ff']} style={styles.modalGradient}>
+
+                {popupResponse === null && (
+                  <>
+                    <Text style={styles.modalEmoji}>🔥</Text>
+                    <Text style={styles.modalTitle}>Daily Check-in!</Text>
+                    <Text style={styles.modalQuestion}>Did you burn 300 calories today?</Text>
+                    <View style={styles.modalButtons}>
+                      <TouchableOpacity onPress={handlePopupYes} activeOpacity={0.8} style={styles.modalBtnWrapper}>
+                        <LinearGradient colors={['#a8edea', '#6ee7b7']} style={styles.modalBtn}>
+                          <Text style={styles.modalBtnText}>✅ Yes!</Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={handlePopupNo} activeOpacity={0.8} style={styles.modalBtnWrapper}>
+                        <LinearGradient colors={['#ffb6d9', '#ff8fa3']} style={styles.modalBtn}>
+                          <Text style={styles.modalBtnText}>❌ Not yet</Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+
+                {popupResponse === "yes" && (
+                  <>
+                    <Text style={styles.modalEmoji}>🏆</Text>
+                    <Text style={styles.modalTitle}>Amazing!</Text>
+                    <Text style={styles.modalMessage}>
+                      We are one step closer to our goal! 💪{"\n\n"}Every calorie burned is a victory. Keep showing up for yourself — your body and mind thank you for it. See you tomorrow! 🌟
+                    </Text>
+                  </>
+                )}
+
+                {popupResponse === "no" && (
+                  <>
+                    <Text style={styles.modalEmoji}>💪</Text>
+                    <Text style={styles.modalTitle}>Buckle up, buddy!</Text>
+                    <Text style={styles.modalMessage}>
+                      We have a long way to go! 🚀{"\n\n"}But every journey starts with one step. Even a 10 minute walk counts. Put those shoes on — your future self is waiting! Let's get moving! 🔥
+                    </Text>
+                  </>
+                )}
+
+              </LinearGradient>
+            </View>
+          </View>
+        </Modal>
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
           {/* Header */}
@@ -164,4 +261,16 @@ const styles = StyleSheet.create({
   buttonsContainer: { gap: 16 },
   featureButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 24, borderRadius: 24, gap: 12, shadowColor: "#000", shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.2, shadowRadius: 16, elevation: 8 },
   buttonText: { color: "#fff", fontSize: 18, fontWeight: "800", letterSpacing: 1, textShadowColor: 'rgba(0, 0, 0, 0.2)', textShadowOffset: { width: 0, height: 1 }, textShadowRadius: 3 },
+  // Popup modal
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', padding: 32 },
+  modalCard: { width: '100%', borderRadius: 28, overflow: 'hidden', shadowColor: '#d4b3e8', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.4, shadowRadius: 20, elevation: 12 },
+  modalGradient: { padding: 32, alignItems: 'center' },
+  modalEmoji: { fontSize: 56, marginBottom: 12 },
+  modalTitle: { fontSize: 26, fontWeight: '800', color: '#8b5a8e', marginBottom: 12, textAlign: 'center' },
+  modalQuestion: { fontSize: 18, fontWeight: '600', color: '#6b5b8e', textAlign: 'center', marginBottom: 28, lineHeight: 26 },
+  modalMessage: { fontSize: 16, fontWeight: '500', color: '#6b5b8e', textAlign: 'center', lineHeight: 26 },
+  modalButtons: { flexDirection: 'row', gap: 16, width: '100%' },
+  modalBtnWrapper: { flex: 1 },
+  modalBtn: { padding: 16, borderRadius: 16, alignItems: 'center' },
+  modalBtnText: { fontSize: 16, fontWeight: '800', color: '#fff' },
 });
